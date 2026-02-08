@@ -1,12 +1,26 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import IntroScreen from "@/components/birthday/IntroScreen";
+import QuizScreen from "@/components/birthday/QuizScreen";
+import FinaleScreen from "@/components/birthday/FinaleScreen";
+
+type Screen = "intro" | "quiz" | "finale";
 
 const Index = () => {
+  const [screen, setScreen] = useState<Screen>("intro");
+  const [finalScore, setFinalScore] = useState(0);
+
+  const handleStartQuiz = () => setScreen("quiz");
+
+  const handleQuizComplete = (score: number) => {
+    setFinalScore(score);
+    setScreen("finale");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {screen === "intro" && <IntroScreen onStart={handleStartQuiz} />}
+      {screen === "quiz" && <QuizScreen onComplete={handleQuizComplete} />}
+      {screen === "finale" && <FinaleScreen score={finalScore} />}
     </div>
   );
 };
